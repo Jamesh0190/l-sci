@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legendary Scientists</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.13.0/cdn.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+            margin: 0 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 25px;
+            outline: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(10px);
+            margin: 2rem 0;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .scientists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .scientist-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .scientist-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .scientist-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .scientist-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .scientist-period {
+            text-align: center;
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .scientist-field {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin: 0 auto 1rem;
+            display: block;
+            text-align: center;
+            width: fit-content;
+        }
+
+        .scientist-description {
+            color: #666;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 3rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .achievements {
+            list-style: none;
+            padding: 0;
+        }
+
+        .achievements li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .achievements li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .timeline {
+            margin: 2rem 0;
+        }
+
+        .timeline-item {
+            padding: 1rem;
+            margin: 1rem 0;
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 4px solid #667eea;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 0;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .filters {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .scientists-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div x-data="scientistsApp()" x-init="init()">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <nav class="nav">
+                    <div class="logo">🧬 Legendary Scientists</div>
+                    
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            placeholder="Search scientists..."
+                            x-model="searchQuery"
+                            @input="filterScientists()"
+                        >
+                    </div>
+                    
+                    <div class="filters">
+                        <template x-for="period in periods" :key="period">
+                            <button 
+                                class="filter-btn"
+                                :class="{ 'active': selectedPeriod === period }"
+                                @click="filterByPeriod(period)"
+                                x-text="period"
+                            ></button>
+                        </template>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <div class="container">
+            <section class="hero fade-in">
+                <h1>Legendary Scientists</h1>
+                <p>Discover the brilliant minds who shaped our understanding of the world, from ancient philosophers to modern pioneers across all cultures and civilizations.</p>
+            </section>
+
+            <!-- Scientists Grid -->
+            <div x-show="!loading" class="scientists-grid">
+                <template x-for="scientist in filteredScientists" :key="scientist.id">
+                    <div class="scientist-card fade-in" @click="openModal(scientist)">
+                        <div class="scientist-avatar" x-text="scientist.name.charAt(0)"></div>
+                        <h3 class="scientist-name" x-text="scientist.name"></h3>
+                        <div class="scientist-period" x-text="scientist.period"></div>
+                        <div class="scientist-field" x-text="scientist.field"></div>
+                        <p class="scientist-description" x-text="scientist.shortDescription"></p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Loading State -->
+            <div x-show="loading" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading scientists...
+            </div>
+
+            <!-- No Results -->
+            <div x-show="!loading && filteredScientists.length === 0" class="no-results">
+                <i class="fas fa-search"></i> No scientists found matching your criteria.
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal" :class="{ 'active': modalOpen }" @click.self="closeModal()">
+            <div class="modal-content" x-show="selectedScientist">
+                <button class="modal-close" @click="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="modal-avatar" x-text="selectedScientist?.name?.charAt(0)"></div>
+                <h2 class="scientist-name" x-text="selectedScientist?.name"></h2>
+                <div class="scientist-period" x-text="selectedScientist?.period"></div>
+                <div class="scientist-field" x-text="selectedScientist?.field"></div>
+                
+                <p style="margin: 1rem 0; line-height: 1.6;" x-text="selectedScientist?.fullDescription"></p>
+                
+                <h3 style="margin: 1.5rem 0 1rem 0; color: #667eea;">Key Achievements</h3>
+                <ul class="achievements">
+                    <template x-for="achievement in selectedScientist?.achievements" :key="achievement">
+                        <li x-text="achievement"></li>
+                    </template>
+                </ul>
+                
+                <div class="timeline" x-show="selectedScientist?.timeline">
+                    <h3 style="margin: 1.5rem 0 1rem 0; color: #667eea;">Timeline</h3>
+                    <template x-for="event in selectedScientist?.timeline" :key="event.year">
+                        <div class="timeline-item">
+                            <strong x-text="event.year"></strong> - <span x-text="event.event"></span>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function scientistsApp() {
+            return {
+                loading: true,
+                searchQuery: '',
+                selectedPeriod: 'All',
+                modalOpen: false,
+                selectedScientist: null,
+                periods: ['All', 'Ancient', 'Islamic Golden Age', 'Renaissance', 'Modern', 'Contemporary'],
+                scientists: [
+                    {
+                        id: 1,
+                        name: "Al-Khwarizmi",
+                        period: "Islamic Golden Age (780-850 CE)",
+                        field: "Mathematics & Astronomy",
+                        shortDescription: "Father of Algebra, introduced Hindu-Arabic numerals to the West",
+                        fullDescription: "Muhammad ibn Musa al-Khwarizmi was a Persian polymath who revolutionized mathematics by developing algebra and introducing the Hindu-Arabic numeral system to the Western world. His work 'Al-Kitab al-mukhtasar fi hisab al-jabr wa'l-muqabala' gave algebra its name and established systematic methods for solving linear and quadratic equations.",
+                        achievements: [
+                            "Developed the field of algebra",
+                            "Introduced Hindu-Arabic numerals to Europe",
+                            "Created the first systematic treatment of solving linear and quadratic equations",
+                            "Contributed to geography and cartography",
+                            "His name gave us the word 'algorithm'"
+                        ],
+                        timeline: [
+                            { year: "780 CE", event: "Born in Khwarezm, Persia" },
+                            { year: "813 CE", event: "Appointed to the House of Wisdom in Baghdad" },
+                            { year: "820 CE", event: "Completed 'The Compendious Book on Calculation by Completion and Balancing'" },
+                            { year: "830 CE", event: "Wrote treatise on Hindu-Arabic numerals" },
+                            { year: "850 CE", event: "Death in Baghdad" }
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: "Ibn al-Haytham (Alhazen)",
+                        period: "Islamic Golden Age (965-1040 CE)",
+                        field: "Optics & Physics",
+                        shortDescription: "Pioneer of the scientific method and optics",
+                        fullDescription: "Abu Ali al-Hasan ibn al-Hasan ibn al-Haytham, known in the West as Alhazen, was an Arab mathematician, astronomer, and physicist. He is considered the father of modern optics and the scientific method, emphasizing experimentation and mathematical proof over philosophical argument.",
+                        achievements: [
+                            "Developed the scientific method",
+                            "Founded the field of optics",
+                            "Explained vision and light behavior",
+                            "Built the first camera obscura",
+                            "Influenced later European scientists like Roger Bacon and Kepler"
+                        ],
+                        timeline: [
+                            { year: "965 CE", event: "Born in Basra, Iraq" },
+                            { year: "1000 CE", event: "Began major work on optics" },
+                            { year: "1021 CE", event: "Completed 'Book of Optics'" },
+                            { year: "1040 CE", event: "Death in Cairo, Egypt" }
+                        ]
+                    },
+                    {
+                        id: 3,
+                        name: "Isaac Newton",
+                        period: "Renaissance (1643-1727)",
+                        field: "Physics & Mathematics",
+                        shortDescription: "Formulated laws of motion and universal gravitation",
+                        fullDescription: "Sir Isaac Newton was an English mathematician, physicist, astronomer, and author who is widely recognized as one of the greatest mathematicians and physicists of all time. His Principia Mathematica laid the foundations for classical mechanics and his law of universal gravitation dominated scientific understanding for centuries.",
+                        achievements: [
+                            "Formulated the three laws of motion",
+                            "Discovered the law of universal gravitation",
+                            "Co-invented calculus",
+                            "Explained the motion of planets and comets",
+                            "Developed theory of color and light"
+                        ],
+                        timeline: [
+                            { year: "1643", event: "Born in Woolsthorpe, England" },
+                            { year: "1665-1666", event: "Miracle years: developed calculus, optics, and gravitation" },
+                            { year: "1687", event: "Published Principia Mathematica" },
+                            { year: "1705", event: "Knighted by Queen Anne" },
+                            { year: "1727", event: "Death in London" }
+                        ]
+                    },
+                    {
+                        id: 4,
+                        name: "Marie Curie",
+                        period: "Modern (1867-1934)",
+                        field: "Physics & Chemistry",
+                        shortDescription: "Pioneer in radioactivity research, first woman Nobel Prize winner",
+                        fullDescription: "Marie Skłodowska Curie was a Polish-born French physicist and chemist who conducted pioneering research on radioactivity. She was the first woman to win a Nobel Prize, the first person to win a Nobel Prize twice, and the only person to win Nobel Prizes in two different scientific fields.",
+                        achievements: [
+                            "Discovered elements polonium and radium",
+                            "Pioneered research on radioactivity",
+                            "First woman to win a Nobel Prize",
+                            "Only person to win Nobel Prizes in two different sciences",
+                            "Founded the field of nuclear chemistry"
+                        ],
+                        timeline: [
+                            { year: "1867", event: "Born in Warsaw, Poland" },
+                            { year: "1891", event: "Moved to Paris to study" },
+                            { year: "1898", event: "Discovered polonium and radium" },
+                            { year: "1903", event: "Won Nobel Prize in Physics" },
+                            { year: "1911", event: "Won Nobel Prize in Chemistry" },
+                            { year: "1934", event: "Death from aplastic anemia" }
+                        ]
+                    },
+                    {
+                        id: 5,
+                        name: "Charles Darwin",
+                        period: "Modern (1809-1882)",
+                        field: "Biology & Natural History",
+                        shortDescription: "Developed the theory of evolution by natural selection",
+                        fullDescription: "Charles Robert Darwin was an English naturalist who proposed the scientific theory that all species of life have evolved over time from common ancestors through the process he called natural selection. His theory revolutionized biology and our understanding of life on Earth.",
+                        achievements: [
+                            "Developed theory of evolution by natural selection",
+                            "Wrote 'On the Origin of Species'",
+                            "Explained the diversity of life",
+                            "Founded modern evolutionary biology",
+                            "Changed humanity's understanding of its place in nature"
+                        ],
+                        timeline: [
+                            { year: "1809", event: "Born in Shrewsbury, England" },
+                            { year: "1831-1836", event: "Voyage on HMS Beagle" },
+                            { year: "1859", event: "Published 'On the Origin of Species'" },
+                            { year: "1871", event: "Published 'The Descent of Man'" },
+                            { year: "1882", event: "Death in Kent, England" }
+                        ]
+                    },
+                    {
+                        id: 6,
+                        name: "Albert Einstein",
+                        period: "Modern (1879-1955)",
+                        field: "Physics",
+                        shortDescription: "Developed theories of relativity, revolutionized physics",
+                        fullDescription: "Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. His work is known for its influence on the philosophy of science and his mass-energy equivalence formula E=mc² has been dubbed 'the world's most famous equation'.",
+                        achievements: [
+                            "Developed special and general theories of relativity",
+                            "Explained the photoelectric effect",
+                            "Formulated E=mc²",
+                            "Contributed to quantum theory",
+                            "Won Nobel Prize in Physics (1921)"
+                        ],
+                        timeline: [
+                            { year: "1879", event: "Born in Ulm, Germany" },
+                            { year: "1905", event: "Miracle year: published four groundbreaking papers" },
+                            { year: "1915", event: "Completed general theory of relativity" },
+                            { year: "1921", event: "Won Nobel Prize in Physics" },
+                            { year: "1955", event: "Death in Princeton, USA" }
+                        ]
+                    },
+                    {
+                        id: 7,
+                        name: "Aristotle",
+                        period: "Ancient (384-322 BCE)",
+                        field: "Philosophy & Natural Sciences",
+                        shortDescription: "Founded logic, influenced Western thought for millennia",
+                        fullDescription: "Aristotle was an ancient Greek philosopher and polymath whose writings covered many subjects including physics, biology, zoology, metaphysics, logic, ethics, aesthetics, poetry, theatre, music, rhetoric, psychology, linguistics, economics, politics, and government. He founded the field of formal logic and made pioneering contributions to all fields of philosophy and science.",
+                        achievements: [
+                            "Founded formal logic",
+                            "Classified living organisms",
+                            "Established principles of scientific reasoning",
+                            "Influenced Western philosophy for over 2000 years",
+                            "Tutored Alexander the Great"
+                        ],
+                        timeline: [
+                            { year: "384 BCE", event: "Born in Stagira, Greece" },
+                            { year: "367 BCE", event: "Joined Plato's Academy" },
+                            { year: "343 BCE", event: "Became tutor to Alexander the Great" },
+                            { year: "335 BCE", event: "Founded the Lyceum in Athens" },
+                            { year: "322 BCE", event: "Death in Chalcis, Greece" }
+                        ]
+                    },
+                    {
+                        id: 8,
+                        name: "Ibn Sina (Avicenna)",
+                        period: "Islamic Golden Age (980-1037 CE)",
+                        field: "Medicine & Philosophy",
+                        shortDescription: "Wrote influential medical texts used for centuries",
+                        fullDescription: "Abu Ali al-Husayn ibn Sina, known in the West as Avicenna, was a Persian polymath who is regarded as one of the most significant physicians, astronomers, thinkers and writers of the Islamic Golden Age. His medical texts were used in European universities for centuries.",
+                        achievements: [
+                            "Wrote 'The Canon of Medicine'",
+                            "Advanced understanding of infectious diseases",
+                            "Contributed to philosophy and metaphysics",
+                            "Described meningitis and other conditions",
+                            "Influenced both Islamic and European medicine"
+                        ],
+                        timeline: [
+                            { year: "980 CE", event: "Born in Afshana, Persia" },
+                            { year: "1000 CE", event: "Began practicing medicine" },
+                            { year: "1025 CE", event: "Completed 'The Canon of Medicine'" },
+                            { year: "1037 CE", event: "Death in Hamadan, Persia" }
+                        ]
+                    },
+                    {
+                        id: 9,
+                        name: "Galileo Galilei",
+                        period: "Renaissance (1564-1642)",
+                        field: "Astronomy & Physics",
+                        shortDescription: "Improved telescope, supported heliocentrism",
+                        fullDescription: "Galileo Galilei was an Italian astronomer, physicist and engineer who played a major role in the Scientific Revolution. He improved the telescope and made groundbreaking astronomical observations that supported the Copernican model of the solar system.",
+                        achievements: [
+                            "Improved the telescope design",
+                            "Discovered Jupiter's four largest moons",
+                            "Observed phases of Venus",
+                            "Supported the heliocentric model",
+                            "Established principles of inertia and relativity"
+                        ],
+                        timeline: [
+                            { year: "1564", event: "Born in Pisa, Italy" },
+                            { year: "1609", event: "Built improved telescope" },
+                            { year: "1610", event: "Discovered Jupiter's moons" },
+                            { year: "1633", event: "Trial by Roman Inquisition" },
+                            { year: "1642", event: "Death in Arcetri, Italy" }
+                        ]
+                    },
+                    {
+                        id: 10,
+                        name: "Tu Youyou",
+                        period: "Contemporary (1930-present)",
+                        field: "Medicine & Pharmacology",
+                        shortDescription: "Discovered artemisinin for malaria treatment",
+                        fullDescription: "Tu Youyou is a Chinese pharmaceutical chemist and malariologist who discovered artemisinin and dihydroartemisinin, used to treat malaria. Her discovery has saved millions of lives and earned her the Nobel Prize in Physiology or Medicine in 2015.",
+                        achievements: [
+                            "Discovered artemisinin for malaria treatment",
+                            "Saved millions of lives worldwide",
+                            "First Chinese woman to win Nobel Prize in Physiology or Medicine",
+                            "Pioneered traditional Chinese medicine research",
+                            "Led Project 523 antimalarial research"
+                        ],
+                        timeline: [
+                            { year: "1930", event: "Born in Ningbo, China" },
+                            { year: "1967", event: "Joined Project 523 for malaria research" },
+                            { year: "1972", event: "Discovered artemisinin" },
+                            { year: "2015", event: "Won Nobel Prize in Physiology or Medicine" }
+                        ]
+                    }
+                ],
+                filteredScientists: [],
+
+                init() {
+                    setTimeout(() => {
+                        this.loading = false;
+                        this.filteredScientists = this.scientists;
+                        this.animateCards();
+                    }, 1000);
+                },
+
+                filterScientists() {
+                    this.filteredScientists = this.scientists.filter(scientist => {
+                        const matchesSearch = scientist.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                            scientist.field.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                                            scientist.shortDescription.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        
+                        const matchesPeriod = this.selectedPeriod === 'All' || scientist.period.includes(this.selectedPeriod);
+                        
+                        return matchesSearch && matchesPeriod;
+                    });
+                    
+                    this.$nextTick(() => {
+                        this.animateCards();
+                    });
+                },
+
+                filterByPeriod(period) {
+                    this.selectedPeriod = period;
+                    this.filterScientists();
+                },
+
+                openModal(scientist) {
+                    this.selectedScientist = scientist;
+                    this.modalOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                closeModal() {
+                    this.modalOpen = false;
+                    this.selectedScientist = null;
+                    document.body.style.overflow = 'auto';
+                },
+
+                animateCards() {
+                    gsap.fromTo('.scientist-card', 
+                        { opacity: 0, y: 30 }, 
+                        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }
+                    );
+                }
+            }
+        }
+
+        // Initialize animations when page loads
+        window.addEventListener('load', () => {
+            gsap.fromTo('.fade-in', 
+                { opacity: 0, y: 30 }, 
+                { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 }
+            );
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const app = Alpine.$data(document.querySelector('[x-data]'));
+                if (app && app.modalOpen) {
+                    app.closeModal();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
