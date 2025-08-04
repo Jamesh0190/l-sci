@@ -8,6 +8,40 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            /* Modern Blue-Green Color Palette */
+            --primary: #6366f1;        /* Indigo - main brand color */
+            --secondary: #10b981;      /* Emerald - secondary brand */
+            --accent: #ec4899;         /* Pink - vibrant accent */
+            --success: #10b981;        /* Emerald - success */
+            --warning: #f59e0b;        /* Amber - warning */
+            --danger: #ef4444;         /* Red - danger */
+            --info: #3b82f6;           /* Blue - info */
+            
+            /* Light Theme Colors */
+            --bg-primary: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #ccfbf1 100%);
+            --bg-secondary: rgba(255, 255, 255, 0.98);
+            --text-primary: #1e293b;    /* Dark slate for better contrast */
+            --text-secondary: #555e6a;  /* Medium slate */
+            --text-light: #747980;      /* Light slate */
+            --card-bg: rgba(255, 255, 255, 0.98);
+            --border-color: rgba(99, 102, 241, 0.2);
+            
+            /* Dark Theme Colors */
+            --dark-bg-primary: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            --dark-bg-secondary: rgba(30, 41, 59, 0.98);
+            --dark-text-primary: #f8fafc;
+            --dark-text-secondary: #e2e8f0;
+            --dark-text-light: #cbd5e1;
+            --dark-card-bg: rgba(30, 41, 59, 0.98);
+            --dark-border-color: rgba(16, 185, 129, 0.3);
+            
+            /* Utility Colors */
+            --white: #ffffff;
+            --black: #000000;
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,9 +50,16 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
-            color: #333;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background: var(--dark-bg-primary);
+            color: var(--dark-text-primary);
         }
 
         .container {
@@ -27,14 +68,21 @@
             padding: 0 20px;
         }
 
+        /* Header Styles */
         .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--bg-secondary);
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .header {
+            background: var(--dark-bg-secondary);
+            border-bottom-color: var(--dark-border-color);
         }
 
         .nav {
@@ -42,15 +90,25 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 0;
+            flex-wrap: wrap;
         }
 
         .logo {
             font-size: 2rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .nav-menu {
@@ -61,24 +119,41 @@
 
         .nav-btn {
             padding: 8px 16px;
-            border: 2px solid #667eea;
+            border: 2px solid var(--primary);
             background: transparent;
-            color: #667eea;
+            color: var(--primary);
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-weight: 500;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .nav-btn:hover::before, .nav-btn.active::before {
+            left: 0;
         }
 
         .nav-btn:hover, .nav-btn.active {
-            background: #667eea;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .search-container {
@@ -91,17 +166,24 @@
         .search-input {
             width: 100%;
             padding: 12px 20px 12px 45px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
+            border: 2px solid var(--border-color);
             border-radius: 25px;
             outline: none;
             font-size: 16px;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.9);
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .search-input {
+            background: var(--dark-bg-secondary);
+            border-color: var(--dark-border-color);
+            color: var(--dark-text-primary);
         }
 
         .search-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .search-icon {
@@ -109,9 +191,31 @@
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #667eea;
+            color: var(--primary);
         }
 
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--primary);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(99, 102, 241, 0.1);
+            transform: rotate(180deg);
+        }
+
+        /* Filters */
         .filters {
             display: flex;
             gap: 1rem;
@@ -123,30 +227,71 @@
 
         .filter-btn {
             padding: 8px 16px;
-            border: 2px solid #667eea;
-            background: transparent;
-            color: #667eea;
+            border: 2px solid var(--primary);
+            background: var(--white);
+            color: var(--primary);
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            transition: var(--transition);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .filter-btn:hover::before, .filter-btn.active::before {
+            left: 0;
         }
 
         .filter-btn:hover, .filter-btn.active {
-            background: #667eea;
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
+        /* Hero Section */
         .hero {
             text-align: center;
             padding: 4rem 0;
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             margin: 2rem 0;
             border-radius: 20px;
             border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .hero {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(99, 102, 241, 0.1) 50%, rgba(16, 185, 129, 0) 70%);
+            animation: pulse 4s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.8) rotate(0deg); opacity: 0.5; }
+            100% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
         }
 
         .hero h1 {
@@ -154,15 +299,31 @@
             color: white;
             margin-bottom: 1rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(45deg, #fff, #a78bfa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientText 3s ease infinite;
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero p {
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.95);
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
+        /* Scientists Grid */
         .scientists-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -171,20 +332,43 @@
         }
 
         .scientist-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
             cursor: pointer;
             position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .scientist-card {
+            background: var(--dark-card-bg);
+            border-color: var(--dark-border-color);
+        }
+
+        .scientist-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .scientist-card:hover::before {
+            transform: scaleX(1);
         }
 
         .scientist-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
         }
 
         .scientist-avatar {
@@ -197,6 +381,12 @@
             background-repeat: no-repeat;
             border: 4px solid white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .scientist-card:hover .scientist-avatar {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
 
         .scientist-name {
@@ -204,20 +394,24 @@
             font-weight: bold;
             text-align: center;
             margin-bottom: 0.5rem;
-            color: #333;
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .scientist-name {
+            color: var(--dark-text-primary);
         }
 
         .scientist-period {
             text-align: center;
-            color: #667eea;
+            color: var(--primary);
             font-weight: 500;
             margin-bottom: 1rem;
         }
 
         .scientist-field {
             display: inline-block;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+            color: var(--primary);
             padding: 4px 12px;
             border-radius: 15px;
             font-size: 0.9rem;
@@ -225,12 +419,18 @@
             display: block;
             text-align: center;
             width: fit-content;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
         }
 
         .scientist-description {
-            color: #666;
+            color: var(--text-secondary);
             line-height: 1.6;
             text-align: center;
+        }
+
+        body.dark-mode .scientist-description {
+            color: var(--dark-text-secondary);
         }
 
         .card-actions {
@@ -252,20 +452,33 @@
             height: 30px;
             border-radius: 50%;
             border: none;
-            background: rgba(102, 126, 234, 0.8);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .action-btn:hover {
-            background: #667eea;
             transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
 
+        .favorite-btn {
+            background: linear-gradient(135deg, var(--danger), var(--accent));
+        }
+
+        .favorite-btn:hover {
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .favorite-btn.active {
+            background: linear-gradient(135deg, var(--danger), var(--accent));
+        }
+
+        /* Modal */
         .modal {
             position: fixed;
             top: 0;
@@ -280,7 +493,7 @@
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .modal.active {
@@ -289,7 +502,7 @@
         }
 
         .modal-content {
-            background: white;
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 2rem;
             max-width: 600px;
@@ -299,6 +512,12 @@
             position: relative;
             transform: scale(0.8);
             transition: transform 0.3s ease;
+            border: 1px solid var(--border-color);
+        }
+
+        body.dark-mode .modal-content {
+            background: var(--dark-card-bg);
+            border-color: var(--dark-border-color);
         }
 
         .modal.active .modal-content {
@@ -313,12 +532,23 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #666;
-            transition: color 0.3s ease;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.dark-mode .modal-close {
+            color: var(--dark-text-secondary);
         }
 
         .modal-close:hover {
-            color: #333;
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.1);
         }
 
         .modal-avatar {
@@ -329,8 +559,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            border: 4px solid #f0f0f0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border: 4px solid var(--primary);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
 
         .modal-actions {
@@ -347,16 +577,22 @@
 
         .achievements li {
             padding: 0.5rem 0;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
             position: relative;
             padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        body.dark-mode .achievements li {
+            border-bottom-color: var(--dark-border-color);
+            color: var(--dark-text-secondary);
         }
 
         .achievements li:before {
             content: "✓";
             position: absolute;
             left: 0;
-            color: #667eea;
+            color: var(--success);
             font-weight: bold;
         }
 
@@ -367,24 +603,44 @@
         .timeline-item {
             padding: 1rem;
             margin: 1rem 0;
-            background: rgba(102, 126, 234, 0.05);
-            border-left: 4px solid #667eea;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(16, 185, 129, 0.05));
+            border-left: 4px solid var(--primary);
             border-radius: 0 10px 10px 0;
         }
 
+        .timeline-item strong {
+            color: var(--primary);
+        }
+
+        body.dark-mode .timeline-item strong {
+            color: var(--primary);
+        }
+
+        /* Quiz Section */
         .quiz-section {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 2rem;
             margin: 2rem 0;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        body.dark-mode .quiz-section {
+            background: var(--dark-card-bg);
+            border-color: var(--dark-border-color);
         }
 
         .quiz-question {
             font-size: 1.2rem;
             margin-bottom: 1rem;
             font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .quiz-question {
+            color: var(--dark-text-primary);
         }
 
         .quiz-options {
@@ -395,41 +651,154 @@
 
         .quiz-option {
             padding: 1rem;
-            border: 2px solid #e0e0e0;
+            border: 2px solid var(--border-color);
             border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.8);
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        body.dark-mode .quiz-option {
+            background: var(--dark-bg-secondary);
+            border-color: var(--dark-border-color);
+            color: var(--dark-text-primary);
         }
 
         .quiz-option:hover {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.05);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1));
+            transform: translateX(5px);
         }
 
         .quiz-option.correct {
-            background: rgba(76, 175, 80, 0.1);
-            border-color: #4caf50;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2));
+            border-color: var(--success);
+            color: var(--success);
         }
 
         .quiz-option.incorrect {
-            background: rgba(244, 67, 54, 0.1);
-            border-color: #f44336;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.2));
+            border-color: var(--danger);
+            color: var(--danger);
         }
 
         .quiz-score {
             text-align: center;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #667eea;
+            color: var(--primary);
             margin: 1rem 0;
         }
 
-        .section-toggle {
-            text-align: center;
+        /* Timeline View */
+        .timeline-view {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        body.dark-mode .timeline-view {
+            background: var(--dark-card-bg);
+            border-color: var(--dark-border-color);
+        }
+
+        .timeline-container {
+            position: relative;
             margin: 2rem 0;
         }
 
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .timeline-event {
+            position: relative;
+            margin: 2rem 0;
+            width: 50%;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .timeline-event {
+            background: var(--dark-bg-secondary);
+        }
+
+        .timeline-event:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+        }
+
+        .timeline-event:nth-child(odd) {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .timeline-event:nth-child(even) {
+            margin-left: 0;
+            margin-right: auto;
+        }
+
+        .timeline-event::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-event:nth-child(odd)::before {
+            left: -10px;
+        }
+
+        .timeline-event:nth-child(even)::before {
+            right: -10px;
+        }
+
+        .timeline-year {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        body.dark-mode .timeline-title {
+            color: var(--dark-text-primary);
+        }
+
+        .timeline-description {
+            color: var(--text-secondary);
+        }
+
+        body.dark-mode .timeline-description {
+            color: var(--dark-text-secondary);
+        }
+
+        /* Loading State */
         .loading {
             text-align: center;
             padding: 4rem 0;
@@ -437,6 +806,50 @@
             font-size: 1.2rem;
         }
 
+        .loading-skeleton {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .skeleton-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.6; }
+        }
+
+        .skeleton-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .skeleton-text {
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+            margin: 0 auto 1rem;
+        }
+
+        /* No Results */
         .no-results {
             text-align: center;
             padding: 4rem 0;
@@ -444,6 +857,62 @@
             font-size: 1.2rem;
         }
 
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--success), var(--info));
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            transform: translateY(-5px);
+        }
+
+        /* Print Styles */
         .print-styles {
             display: none;
         }
@@ -466,31 +935,39 @@
             }
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
                 gap: 1rem;
             }
-
             .search-container {
                 max-width: 100%;
                 margin: 0;
             }
-
             .filters, .nav-menu {
                 flex-wrap: wrap;
                 justify-content: center;
             }
-
             .hero h1 {
                 font-size: 2.5rem;
             }
-
             .scientists-grid {
                 grid-template-columns: 1fr;
             }
+            .timeline-container::before {
+                left: 20px;
+            }
+            .timeline-event {
+                width: calc(100% - 40px);
+                margin-left: 40px !important;
+            }
+            .timeline-event::before {
+                left: -10px !important;
+            }
         }
 
+        /* Animations */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
@@ -504,24 +981,17 @@
             }
         }
 
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #4caf50;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        .slide-in {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            z-index: 1001;
+            transform: translateX(-30px);
+            animation: slideIn 0.6s ease forwards;
         }
 
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
@@ -531,7 +1001,9 @@
         <header class="header">
             <div class="container">
                 <nav class="nav">
-                    <div class="logo">🧬 Legendary Scientists</div>
+                    <div class="logo">
+                        <i class="fas fa-atom"></i> Legendary Scientists
+                    </div>
                     
                     <div class="search-container">
                         <i class="fas fa-search search-icon"></i>
@@ -554,18 +1026,36 @@
                         </button>
                         <button 
                             class="nav-btn"
+                            :class="{ 'active': currentSection === 'timeline' }"
+                            @click="setSection('timeline')"
+                        >
+                            <i class="fas fa-clock"></i> Timeline
+                        </button>
+                        <button 
+                            class="nav-btn"
                             :class="{ 'active': currentSection === 'quiz' }"
                             @click="setSection('quiz')"
                         >
                             <i class="fas fa-brain"></i> Quiz
+                        </button>
+                        <button 
+                            class="nav-btn"
+                            :class="{ 'active': currentSection === 'favorites' }"
+                            @click="setSection('favorites')"
+                        >
+                            <i class="fas fa-heart"></i> Favorites
+                        </button>
+                        <button class="theme-toggle" @click="toggleDarkMode()">
+                            <i :class="darkMode ? 'fas fa-sun' : 'fas fa-moon'"></i>
                         </button>
                     </div>
                 </nav>
             </div>
         </header>
 
-        <!-- Hero Section -->
+        <!-- Main Content -->
         <div class="container">
+            <!-- Hero Section -->
             <section class="hero fade-in">
                 <h1>Legendary Scientists</h1>
                 <p>Discover the brilliant minds who shaped our understanding of the world, from ancient philosophers to modern pioneers across all cultures and civilizations.</p>
@@ -585,10 +1075,30 @@
 
             <!-- Scientists Section -->
             <div x-show="currentSection === 'scientists'">
+                <!-- Loading State -->
+                <div x-show="loading" class="loading-skeleton">
+                    <template x-for="i in 6" :key="i">
+                        <div class="skeleton-card">
+                            <div class="skeleton-avatar"></div>
+                            <div class="skeleton-text short"></div>
+                            <div class="skeleton-text"></div>
+                            <div class="skeleton-text"></div>
+                            <div class="skeleton-text"></div>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Scientists Grid -->
                 <div x-show="!loading" class="scientists-grid">
                     <template x-for="scientist in filteredScientists" :key="scientist.id">
                         <div class="scientist-card fade-in" @click="openModal(scientist)">
                             <div class="card-actions">
+                                <button class="action-btn favorite-btn" 
+                                        :class="{ 'active': favorites.includes(scientist.id) }"
+                                        @click.stop="toggleFavorite(scientist.id)" 
+                                        title="Add to Favorites">
+                                    <i class="fas fa-heart"></i>
+                                </button>
                                 <button class="action-btn" @click.stop="shareScientist(scientist)" title="Share">
                                     <i class="fas fa-share"></i>
                                 </button>
@@ -605,20 +1115,67 @@
                     </template>
                 </div>
                 
-                <!-- Loading State -->
-                <div x-show="loading" class="loading">
-                    <i class="fas fa-spinner fa-spin"></i> Loading scientists...
-                </div>
-
                 <!-- No Results -->
                 <div x-show="!loading && filteredScientists.length === 0" class="no-results">
                     <i class="fas fa-search"></i> No scientists found matching your criteria.
                 </div>
             </div>
 
+            <!-- Timeline Section -->
+            <div x-show="currentSection === 'timeline'" class="timeline-view">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: white;">
+                    <i class="fas fa-clock"></i> Historical Timeline
+                </h2>
+                <div class="timeline-container">
+                    <template x-for="event in timelineEvents" :key="event.id">
+                        <div class="timeline-event fade-in">
+                            <div class="timeline-year" x-text="event.year"></div>
+                            <div class="timeline-title" x-text="event.title"></div>
+                            <div class="timeline-description" x-text="event.description"></div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Favorites Section -->
+            <div x-show="currentSection === 'favorites'">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: white;">
+                    <i class="fas fa-heart"></i> Your Favorite Scientists
+                </h2>
+                
+                <div x-show="favorites.length === 0" class="no-results">
+                    <i class="fas fa-heart-broken"></i> You haven't added any scientists to your favorites yet.
+                </div>
+                
+                <div x-show="favorites.length > 0" class="scientists-grid">
+                    <template x-for="scientist in favoriteScientists" :key="scientist.id">
+                        <div class="scientist-card fade-in" @click="openModal(scientist)">
+                            <div class="card-actions">
+                                <button class="action-btn favorite-btn active" 
+                                        @click.stop="toggleFavorite(scientist.id)" 
+                                        title="Remove from Favorites">
+                                    <i class="fas fa-heart"></i>
+                                </button>
+                                <button class="action-btn" @click.stop="shareScientist(scientist)" title="Share">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                                <button class="action-btn" @click.stop="printScientist(scientist)" title="Print">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                            <div class="scientist-avatar" :style="'background-image: url(' + scientist.image + ')'"></div>
+                            <h3 class="scientist-name" x-text="scientist.name"></h3>
+                            <div class="scientist-period" x-text="scientist.period"></div>
+                            <div class="scientist-field" x-text="scientist.field"></div>
+                            <p class="scientist-description" x-text="scientist.shortDescription"></p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
             <!-- Quiz Section -->
             <div x-show="currentSection === 'quiz'" class="quiz-section">
-                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">
                     <i class="fas fa-brain"></i> Test Your Knowledge
                 </h2>
                 
@@ -658,10 +1215,14 @@
                             <span x-text="currentQuestionIndex + 1 < quizQuestions.length ? 'Next Question' : 'Finish Quiz'"></span>
                         </button>
                     </div>
+                    
+                    <div x-show="showingAnswer" style="margin-top: 1rem; padding: 1rem; background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(16, 185, 129, 0.1)); border-radius: 10px;">
+                        <strong>Explanation:</strong> <span x-text="currentQuestion?.explanation"></span>
+                    </div>
                 </div>
                 
                 <div x-show="quizCompleted" style="text-align: center;">
-                    <h3 style="color: #667eea; margin-bottom: 1rem;">Quiz Completed!</h3>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem;">Quiz Completed!</h3>
                     <div class="quiz-score" style="font-size: 2rem;">
                         Final Score: <span x-text="quizScore"></span>/<span x-text="quizQuestions.length"></span>
                     </div>
@@ -688,6 +1249,10 @@
                 <div class="scientist-field" x-text="selectedScientist?.field"></div>
                 
                 <div class="modal-actions">
+                    <button class="nav-btn" @click="toggleFavorite(selectedScientist.id)">
+                        <i :class="favorites.includes(selectedScientist.id) ? 'fas fa-heart' : 'far fa-heart'"></i> 
+                        <span x-text="favorites.includes(selectedScientist.id) ? 'Remove from Favorites' : 'Add to Favorites'"></span>
+                    </button>
                     <button class="nav-btn" @click="shareScientist(selectedScientist)">
                         <i class="fas fa-share"></i> Share
                     </button>
@@ -696,9 +1261,9 @@
                     </button>
                 </div>
                 
-                <p style="margin: 1rem 0; line-height: 1.6;" x-text="selectedScientist?.fullDescription"></p>
+                <p style="margin: 1rem 0; line-height: 1.6; color: var(--text-secondary);" x-text="selectedScientist?.fullDescription"></p>
                 
-                <h3 style="margin: 1.5rem 0 1rem 0; color: #667eea;">Key Achievements</h3>
+                <h3 style="margin: 1.5rem 0 1rem 0; color: var(--primary);">Key Achievements</h3>
                 <ul class="achievements">
                     <template x-for="achievement in selectedScientist?.achievements" :key="achievement">
                         <li x-text="achievement"></li>
@@ -706,7 +1271,7 @@
                 </ul>
                 
                 <div class="timeline" x-show="selectedScientist?.timeline">
-                    <h3 style="margin: 1.5rem 0 1rem 0; color: #667eea;">Timeline</h3>
+                    <h3 style="margin: 1.5rem 0 1rem 0; color: var(--primary);">Timeline</h3>
                     <template x-for="event in selectedScientist?.timeline" :key="event.year">
                         <div class="timeline-item">
                             <strong x-text="event.year"></strong> - <span x-text="event.event"></span>
@@ -740,7 +1305,13 @@
 
         <!-- Toast Notification -->
         <div class="toast" :class="{ 'show': showToast }">
+            <i class="fas fa-check-circle"></i>
             <span x-text="toastMessage"></span>
+        </div>
+
+        <!-- Back to Top Button -->
+        <div class="back-to-top" :class="{ 'show': showBackToTop }" @click="scrollToTop()">
+            <i class="fas fa-arrow-up"></i>
         </div>
     </div>
 
@@ -748,6 +1319,7 @@
         function scientistsApp() {
             return {
                 loading: true,
+                darkMode: true, // Default to dark mode
                 searchQuery: '',
                 selectedCategory: 'All',
                 currentSection: 'scientists',
@@ -756,6 +1328,8 @@
                 printContent: null,
                 showToast: false,
                 toastMessage: '',
+                showBackToTop: false,
+                favorites: [],
                 
                 // Quiz variables
                 currentQuestionIndex: 0,
@@ -1044,6 +1618,81 @@
                 ],
                 filteredScientists: [],
                 
+                timelineEvents: [
+                    {
+                        id: 1,
+                        year: "384 BCE",
+                        title: "Aristotle Born",
+                        description: "The ancient Greek philosopher who would influence Western thought for over 2000 years was born in Stagira, Greece."
+                    },
+                    {
+                        id: 2,
+                        year: "780 CE",
+                        title: "Al-Khwarizmi Born",
+                        description: "The Persian mathematician known as the 'Father of Algebra' was born in Khwarezm, Persia."
+                    },
+                    {
+                        id: 3,
+                        year: "965 CE",
+                        title: "Ibn al-Haytham Born",
+                        description: "The Arab scientist known as the father of modern optics was born in Basra, Iraq."
+                    },
+                    {
+                        id: 4,
+                        year: "980 CE",
+                        title: "Ibn Sina Born",
+                        description: "The Persian physician known as Avicenna in the West was born in Afshana, Persia."
+                    },
+                    {
+                        id: 5,
+                        year: "1564",
+                        title: "Galileo Galilei Born",
+                        description: "The Italian astronomer who improved the telescope and supported heliocentrism was born in Pisa, Italy."
+                    },
+                    {
+                        id: 6,
+                        year: "1643",
+                        title: "Isaac Newton Born",
+                        description: "The English physicist who formulated the laws of motion and universal gravitation was born in Woolsthorpe, England."
+                    },
+                    {
+                        id: 7,
+                        year: "1809",
+                        title: "Charles Darwin Born",
+                        description: "The English naturalist who developed the theory of evolution by natural selection was born in Shrewsbury, England."
+                    },
+                    {
+                        id: 8,
+                        year: "1856",
+                        title: "Nikola Tesla Born",
+                        description: "The Serbian-American inventor who pioneered alternating current and wireless technology was born in Smiljan, Croatia."
+                    },
+                    {
+                        id: 9,
+                        year: "1867",
+                        title: "Marie Curie Born",
+                        description: "The Polish-French physicist and chemist who pioneered research on radioactivity was born in Warsaw, Poland."
+                    },
+                    {
+                        id: 10,
+                        year: "1879",
+                        title: "Albert Einstein Born",
+                        description: "The German-born physicist who developed the theory of relativity was born in Ulm, Germany."
+                    },
+                    {
+                        id: 11,
+                        year: "1920",
+                        title: "Rosalind Franklin Born",
+                        description: "The English chemist whose work was central to understanding the structure of DNA was born in London, England."
+                    },
+                    {
+                        id: 12,
+                        year: "1930",
+                        title: "Tu Youyou Born",
+                        description: "The Chinese pharmaceutical chemist who discovered artemisinin for malaria treatment was born in Ningbo, China."
+                    }
+                ],
+                
                 quizQuestions: [
                     {
                         question: "Who is known as the 'Father of Algebra'?",
@@ -1094,20 +1743,47 @@
                         explanation: "Ibn Sina (Avicenna) wrote 'The Canon of Medicine', used in European universities for centuries."
                     }
                 ],
-
+                
                 init() {
+                    // Load favorites from localStorage
+                    const savedFavorites = localStorage.getItem('favorites');
+                    if (savedFavorites) {
+                        this.favorites = JSON.parse(savedFavorites);
+                    }
+                    
+                    // Load dark mode preference
+                    const savedDarkMode = localStorage.getItem('darkMode');
+                    if (savedDarkMode !== null) {
+                        this.darkMode = savedDarkMode === 'true';
+                    }
+                    
+                    // Apply dark mode class if needed
+                    if (this.darkMode) {
+                        document.body.classList.add('dark-mode');
+                    }
+                    
+                    // Simulate loading
                     setTimeout(() => {
                         this.loading = false;
                         this.filteredScientists = this.scientists;
                         this.animateCards();
-                    }, 1000);
+                    }, 1500);
+                    
+                    // Shuffle quiz questions
                     this.shuffleQuizQuestions();
+                    
+                    // Add scroll event listener for back to top button
+                    window.addEventListener('scroll', this.handleScroll.bind(this));
                 },
-
+                
                 get currentQuestion() {
                     return this.quizQuestions[this.currentQuestionIndex];
                 },
-
+                
+                get favoriteScientists() {
+                    return this.scientists.filter(scientist => this.favorites.includes(scientist.id));
+                },
+                
                 filterScientists() {
                     this.filteredScientists = this.scientists.filter(scientist => {
                         const matchesSearch = scientist.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
@@ -1123,31 +1799,45 @@
                         this.animateCards();
                     });
                 },
-
+                
                 filterByCategory(category) {
                     this.selectedCategory = category;
                     this.filterScientists();
                 },
-
+                
                 setSection(section) {
                     this.currentSection = section;
                     if (section === 'quiz') {
                         this.resetQuiz();
                     }
                 },
-
+                
                 openModal(scientist) {
                     this.selectedScientist = scientist;
                     this.modalOpen = true;
                     document.body.style.overflow = 'hidden';
                 },
-
+                
                 closeModal() {
                     this.modalOpen = false;
                     this.selectedScientist = null;
                     document.body.style.overflow = 'auto';
                 },
-
+                
+                toggleFavorite(scientistId) {
+                    const index = this.favorites.indexOf(scientistId);
+                    if (index === -1) {
+                        this.favorites.push(scientistId);
+                        this.showToastMessage('Added to favorites!');
+                    } else {
+                        this.favorites.splice(index, 1);
+                        this.showToastMessage('Removed from favorites!');
+                    }
+                    
+                    // Save favorites to localStorage
+                    localStorage.setItem('favorites', JSON.stringify(this.favorites));
+                },
+                
                 shareScientist(scientist) {
                     if (navigator.share) {
                         navigator.share({
@@ -1163,14 +1853,14 @@
                         });
                     }
                 },
-
+                
                 printScientist(scientist) {
                     this.printContent = scientist;
                     setTimeout(() => {
                         window.print();
                     }, 100);
                 },
-
+                
                 showToastMessage(message) {
                     this.toastMessage = message;
                     this.showToast = true;
@@ -1178,25 +1868,42 @@
                         this.showToast = false;
                     }, 3000);
                 },
-
+                
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', this.darkMode);
+                },
+                
+                handleScroll() {
+                    this.showBackToTop = window.scrollY > 300;
+                },
+                
+                scrollToTop() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                },
+                
                 // Quiz Methods
                 shuffleQuizQuestions() {
                     this.quizQuestions = this.quizQuestions.sort(() => Math.random() - 0.5);
                 },
-
+                
                 selectAnswer(index) {
                     if (!this.showingAnswer) {
                         this.selectedAnswer = index;
                     }
                 },
-
+                
                 checkAnswer() {
                     this.showingAnswer = true;
                     if (this.selectedAnswer === this.currentQuestion.correct) {
                         this.quizScore++;
                     }
                 },
-
+                
                 getOptionClass(index) {
                     if (!this.showingAnswer) {
                         return this.selectedAnswer === index ? 'quiz-option selected' : 'quiz-option';
@@ -1209,7 +1916,7 @@
                     }
                     return 'quiz-option';
                 },
-
+                
                 nextQuestion() {
                     if (this.currentQuestionIndex + 1 < this.quizQuestions.length) {
                         this.currentQuestionIndex++;
@@ -1219,7 +1926,7 @@
                         this.quizCompleted = true;
                     }
                 },
-
+                
                 getScoreMessage() {
                     const percentage = (this.quizScore / this.quizQuestions.length) * 100;
                     if (percentage >= 90) return "Excellent! You're a true science enthusiast! 🌟";
@@ -1227,12 +1934,12 @@
                     if (percentage >= 50) return "Good work! Keep learning about these amazing minds! 📚";
                     return "Keep exploring! There's so much to discover about these legendary scientists! 🔬";
                 },
-
+                
                 restartQuiz() {
                     this.resetQuiz();
                     this.shuffleQuizQuestions();
                 },
-
+                
                 resetQuiz() {
                     this.currentQuestionIndex = 0;
                     this.selectedAnswer = null;
@@ -1240,16 +1947,21 @@
                     this.quizScore = 0;
                     this.quizCompleted = false;
                 },
-
+                
                 animateCards() {
                     gsap.fromTo('.scientist-card', 
                         { opacity: 0, y: 30 }, 
                         { opacity: 1, y: 0, duration: 0.6, stagger: 0.1 }
                     );
+                    
+                    gsap.fromTo('.timeline-event', 
+                        { opacity: 0, x: -30 }, 
+                        { opacity: 1, x: 0, duration: 0.6, stagger: 0.1 }
+                    );
                 }
             }
         }
-
+        
         // Initialize animations when page loads
         window.addEventListener('load', () => {
             gsap.fromTo('.fade-in', 
@@ -1257,22 +1969,35 @@
                 { opacity: 1, y: 0, duration: 0.8, stagger: 0.2 }
             );
         });
-
+        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                const app = Alpine.$data(document.querySelector('[x-data]'));
-                if (app && app.modalOpen) {
-                    app.closeModal();
-                }
+            const app = Alpine.$data(document.querySelector('[x-data]'));
+            
+            if (e.key === 'Escape' && app.modalOpen) {
+                app.closeModal();
+            }
+            
+            if (e.key === '/' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.querySelector('.search-input').focus();
+            }
+            
+            if (e.key === 't' && e.target.tagName !== 'INPUT') {
+                e.preventDefault();
+                app.toggleDarkMode();
             }
         });
-
+        
         // Print styles
         const printStyles = `
             @media print {
-                body * { visibility: hidden; }
-                .print-content, .print-content * { visibility: visible; }
+                body * {
+                    visibility: hidden;
+                }
+                .print-content, .print-content * {
+                    visibility: visible;
+                }
                 .print-content {
                     position: absolute;
                     left: 0;
