@@ -53,6 +53,34 @@
             background-clip: text;
         }
 
+        .nav-menu {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
         .search-container {
             position: relative;
             flex: 1;
@@ -88,6 +116,9 @@
             display: flex;
             gap: 1rem;
             align-items: center;
+            flex-wrap: wrap;
+            margin: 1rem 0;
+            justify-content: center;
         }
 
         .filter-btn {
@@ -148,6 +179,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
 
         .scientist-card:hover {
@@ -156,17 +188,15 @@
         }
 
         .scientist-avatar {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0 auto 1rem;
-            font-size: 2rem;
-            color: white;
-            font-weight: bold;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 4px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .scientist-name {
@@ -201,6 +231,39 @@
             color: #666;
             line-height: 1.6;
             text-align: center;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .scientist-card:hover .card-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(102, 126, 234, 0.8);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #667eea;
+            transform: scale(1.1);
         }
 
         .modal {
@@ -262,14 +325,19 @@
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
             margin: 0 auto 1rem;
-            font-size: 3rem;
-            color: white;
-            font-weight: bold;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 4px solid #f0f0f0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
         }
 
         .achievements {
@@ -304,6 +372,64 @@
             border-radius: 0 10px 10px 0;
         }
 
+        .quiz-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .quiz-option:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .quiz-option.correct {
+            background: rgba(76, 175, 80, 0.1);
+            border-color: #4caf50;
+        }
+
+        .quiz-option.incorrect {
+            background: rgba(244, 67, 54, 0.1);
+            border-color: #f44336;
+        }
+
+        .quiz-score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+
+        .section-toggle {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
         .loading {
             text-align: center;
             padding: 4rem 0;
@@ -318,6 +444,28 @@
             font-size: 1.2rem;
         }
 
+        .print-styles {
+            display: none;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-content, .print-content * {
+                visibility: visible;
+            }
+            .print-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+            .print-styles {
+                display: block;
+            }
+        }
+
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
@@ -329,7 +477,7 @@
                 margin: 0;
             }
 
-            .filters {
+            .filters, .nav-menu {
                 flex-wrap: wrap;
                 justify-content: center;
             }
@@ -355,6 +503,26 @@
                 transform: translateY(0);
             }
         }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -376,15 +544,21 @@
                         >
                     </div>
                     
-                    <div class="filters">
-                        <template x-for="period in periods" :key="period">
-                            <button 
-                                class="filter-btn"
-                                :class="{ 'active': selectedPeriod === period }"
-                                @click="filterByPeriod(period)"
-                                x-text="period"
-                            ></button>
-                        </template>
+                    <div class="nav-menu">
+                        <button 
+                            class="nav-btn"
+                            :class="{ 'active': currentSection === 'scientists' }"
+                            @click="setSection('scientists')"
+                        >
+                            <i class="fas fa-users"></i> Scientists
+                        </button>
+                        <button 
+                            class="nav-btn"
+                            :class="{ 'active': currentSection === 'quiz' }"
+                            @click="setSection('quiz')"
+                        >
+                            <i class="fas fa-brain"></i> Quiz
+                        </button>
                     </div>
                 </nav>
             </div>
@@ -397,27 +571,107 @@
                 <p>Discover the brilliant minds who shaped our understanding of the world, from ancient philosophers to modern pioneers across all cultures and civilizations.</p>
             </section>
 
-            <!-- Scientists Grid -->
-            <div x-show="!loading" class="scientists-grid">
-                <template x-for="scientist in filteredScientists" :key="scientist.id">
-                    <div class="scientist-card fade-in" @click="openModal(scientist)">
-                        <div class="scientist-avatar" x-text="scientist.name.charAt(0)"></div>
-                        <h3 class="scientist-name" x-text="scientist.name"></h3>
-                        <div class="scientist-period" x-text="scientist.period"></div>
-                        <div class="scientist-field" x-text="scientist.field"></div>
-                        <p class="scientist-description" x-text="scientist.shortDescription"></p>
-                    </div>
+            <!-- Filters -->
+            <div class="filters" x-show="currentSection === 'scientists'">
+                <template x-for="category in categories" :key="category">
+                    <button 
+                        class="filter-btn"
+                        :class="{ 'active': selectedCategory === category }"
+                        @click="filterByCategory(category)"
+                        x-text="category"
+                    ></button>
                 </template>
             </div>
 
-            <!-- Loading State -->
-            <div x-show="loading" class="loading">
-                <i class="fas fa-spinner fa-spin"></i> Loading scientists...
+            <!-- Scientists Section -->
+            <div x-show="currentSection === 'scientists'">
+                <div x-show="!loading" class="scientists-grid">
+                    <template x-for="scientist in filteredScientists" :key="scientist.id">
+                        <div class="scientist-card fade-in" @click="openModal(scientist)">
+                            <div class="card-actions">
+                                <button class="action-btn" @click.stop="shareScientist(scientist)" title="Share">
+                                    <i class="fas fa-share"></i>
+                                </button>
+                                <button class="action-btn" @click.stop="printScientist(scientist)" title="Print">
+                                    <i class="fas fa-print"></i>
+                                </button>
+                            </div>
+                            <div class="scientist-avatar" :style="'background-image: url(' + scientist.image + ')'"></div>
+                            <h3 class="scientist-name" x-text="scientist.name"></h3>
+                            <div class="scientist-period" x-text="scientist.period"></div>
+                            <div class="scientist-field" x-text="scientist.field"></div>
+                            <p class="scientist-description" x-text="scientist.shortDescription"></p>
+                        </div>
+                    </template>
+                </div>
+                
+                <!-- Loading State -->
+                <div x-show="loading" class="loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading scientists...
+                </div>
+
+                <!-- No Results -->
+                <div x-show="!loading && filteredScientists.length === 0" class="no-results">
+                    <i class="fas fa-search"></i> No scientists found matching your criteria.
+                </div>
             </div>
 
-            <!-- No Results -->
-            <div x-show="!loading && filteredScientists.length === 0" class="no-results">
-                <i class="fas fa-search"></i> No scientists found matching your criteria.
+            <!-- Quiz Section -->
+            <div x-show="currentSection === 'quiz'" class="quiz-section">
+                <h2 style="text-align: center; margin-bottom: 2rem; color: #667eea;">
+                    <i class="fas fa-brain"></i> Test Your Knowledge
+                </h2>
+                
+                <div x-show="!quizCompleted">
+                    <div class="quiz-score">
+                        Question <span x-text="currentQuestionIndex + 1"></span> of <span x-text="quizQuestions.length"></span>
+                        | Score: <span x-text="quizScore"></span>/<span x-text="currentQuestionIndex"></span>
+                    </div>
+                    
+                    <div class="quiz-question" x-text="currentQuestion?.question"></div>
+                    
+                    <div class="quiz-options">
+                        <template x-for="(option, index) in currentQuestion?.options" :key="index">
+                            <div 
+                                class="quiz-option"
+                                :class="getOptionClass(index)"
+                                @click="selectAnswer(index)"
+                                x-text="option"
+                            ></div>
+                        </template>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 1rem;">
+                        <button 
+                            class="nav-btn"
+                            x-show="selectedAnswer !== null && !showingAnswer"
+                            @click="checkAnswer()"
+                        >
+                            Check Answer
+                        </button>
+                        
+                        <button 
+                            class="nav-btn"
+                            x-show="showingAnswer"
+                            @click="nextQuestion()"
+                        >
+                            <span x-text="currentQuestionIndex + 1 < quizQuestions.length ? 'Next Question' : 'Finish Quiz'"></span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div x-show="quizCompleted" style="text-align: center;">
+                    <h3 style="color: #667eea; margin-bottom: 1rem;">Quiz Completed!</h3>
+                    <div class="quiz-score" style="font-size: 2rem;">
+                        Final Score: <span x-text="quizScore"></span>/<span x-text="quizQuestions.length"></span>
+                    </div>
+                    <p style="margin: 1rem 0; font-size: 1.1rem;">
+                        <span x-text="getScoreMessage()"></span>
+                    </p>
+                    <button class="nav-btn" @click="restartQuiz()">
+                        <i class="fas fa-redo"></i> Take Quiz Again
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -428,10 +682,19 @@
                     <i class="fas fa-times"></i>
                 </button>
                 
-                <div class="modal-avatar" x-text="selectedScientist?.name?.charAt(0)"></div>
+                <div class="modal-avatar" :style="'background-image: url(' + selectedScientist?.image + ')'"></div>
                 <h2 class="scientist-name" x-text="selectedScientist?.name"></h2>
                 <div class="scientist-period" x-text="selectedScientist?.period"></div>
                 <div class="scientist-field" x-text="selectedScientist?.field"></div>
+                
+                <div class="modal-actions">
+                    <button class="nav-btn" @click="shareScientist(selectedScientist)">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                    <button class="nav-btn" @click="printScientist(selectedScientist)">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                </div>
                 
                 <p style="margin: 1rem 0; line-height: 1.6;" x-text="selectedScientist?.fullDescription"></p>
                 
@@ -452,6 +715,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Print Content -->
+        <div class="print-content" style="display: none;">
+            <div x-show="printContent">
+                <h1 x-text="printContent?.name"></h1>
+                <p><strong>Period:</strong> <span x-text="printContent?.period"></span></p>
+                <p><strong>Field:</strong> <span x-text="printContent?.field"></span></p>
+                <p x-text="printContent?.fullDescription"></p>
+                <h3>Key Achievements:</h3>
+                <ul>
+                    <template x-for="achievement in printContent?.achievements" :key="achievement">
+                        <li x-text="achievement"></li>
+                    </template>
+                </ul>
+                <div x-show="printContent?.timeline">
+                    <h3>Timeline:</h3>
+                    <template x-for="event in printContent?.timeline" :key="event.year">
+                        <p><strong x-text="event.year"></strong> - <span x-text="event.event"></span></p>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div class="toast" :class="{ 'show': showToast }">
+            <span x-text="toastMessage"></span>
+        </div>
     </div>
 
     <script>
@@ -459,16 +749,30 @@
             return {
                 loading: true,
                 searchQuery: '',
-                selectedPeriod: 'All',
+                selectedCategory: 'All',
+                currentSection: 'scientists',
                 modalOpen: false,
                 selectedScientist: null,
-                periods: ['All', 'Ancient', 'Islamic Golden Age', 'Renaissance', 'Modern', 'Contemporary'],
+                printContent: null,
+                showToast: false,
+                toastMessage: '',
+                
+                // Quiz variables
+                currentQuestionIndex: 0,
+                selectedAnswer: null,
+                showingAnswer: false,
+                quizScore: 0,
+                quizCompleted: false,
+                
+                categories: ['All', 'Physics', 'Mathematics', 'Medicine', 'Chemistry', 'Biology', 'Astronomy', 'Philosophy'],
+                
                 scientists: [
                     {
                         id: 1,
                         name: "Al-Khwarizmi",
                         period: "Islamic Golden Age (780-850 CE)",
-                        field: "Mathematics & Astronomy",
+                        field: "Mathematics",
+                        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Father of Algebra, introduced Hindu-Arabic numerals to the West",
                         fullDescription: "Muhammad ibn Musa al-Khwarizmi was a Persian polymath who revolutionized mathematics by developing algebra and introducing the Hindu-Arabic numeral system to the Western world. His work 'Al-Kitab al-mukhtasar fi hisab al-jabr wa'l-muqabala' gave algebra its name and established systematic methods for solving linear and quadratic equations.",
                         achievements: [
@@ -490,7 +794,8 @@
                         id: 2,
                         name: "Ibn al-Haytham (Alhazen)",
                         period: "Islamic Golden Age (965-1040 CE)",
-                        field: "Optics & Physics",
+                        field: "Physics",
+                        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Pioneer of the scientific method and optics",
                         fullDescription: "Abu Ali al-Hasan ibn al-Hasan ibn al-Haytham, known in the West as Alhazen, was an Arab mathematician, astronomer, and physicist. He is considered the father of modern optics and the scientific method, emphasizing experimentation and mathematical proof over philosophical argument.",
                         achievements: [
@@ -511,7 +816,8 @@
                         id: 3,
                         name: "Isaac Newton",
                         period: "Renaissance (1643-1727)",
-                        field: "Physics & Mathematics",
+                        field: "Physics",
+                        image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Formulated laws of motion and universal gravitation",
                         fullDescription: "Sir Isaac Newton was an English mathematician, physicist, astronomer, and author who is widely recognized as one of the greatest mathematicians and physicists of all time. His Principia Mathematica laid the foundations for classical mechanics and his law of universal gravitation dominated scientific understanding for centuries.",
                         achievements: [
@@ -533,7 +839,8 @@
                         id: 4,
                         name: "Marie Curie",
                         period: "Modern (1867-1934)",
-                        field: "Physics & Chemistry",
+                        field: "Chemistry",
+                        image: "https://images.unsplash.com/photo-1494790108755-2616c043fe65?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Pioneer in radioactivity research, first woman Nobel Prize winner",
                         fullDescription: "Marie Skłodowska Curie was a Polish-born French physicist and chemist who conducted pioneering research on radioactivity. She was the first woman to win a Nobel Prize, the first person to win a Nobel Prize twice, and the only person to win Nobel Prizes in two different scientific fields.",
                         achievements: [
@@ -556,7 +863,8 @@
                         id: 5,
                         name: "Charles Darwin",
                         period: "Modern (1809-1882)",
-                        field: "Biology & Natural History",
+                        field: "Biology",
+                        image: "https://images.unsplash.com/photo-1507591064344-4c142b2e0b82?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Developed the theory of evolution by natural selection",
                         fullDescription: "Charles Robert Darwin was an English naturalist who proposed the scientific theory that all species of life have evolved over time from common ancestors through the process he called natural selection. His theory revolutionized biology and our understanding of life on Earth.",
                         achievements: [
@@ -579,6 +887,7 @@
                         name: "Albert Einstein",
                         period: "Modern (1879-1955)",
                         field: "Physics",
+                        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Developed theories of relativity, revolutionized physics",
                         fullDescription: "Albert Einstein was a German-born theoretical physicist who developed the theory of relativity, one of the two pillars of modern physics. His work is known for its influence on the philosophy of science and his mass-energy equivalence formula E=mc² has been dubbed 'the world's most famous equation'.",
                         achievements: [
@@ -600,7 +909,8 @@
                         id: 7,
                         name: "Aristotle",
                         period: "Ancient (384-322 BCE)",
-                        field: "Philosophy & Natural Sciences",
+                        field: "Philosophy",
+                        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Founded logic, influenced Western thought for millennia",
                         fullDescription: "Aristotle was an ancient Greek philosopher and polymath whose writings covered many subjects including physics, biology, zoology, metaphysics, logic, ethics, aesthetics, poetry, theatre, music, rhetoric, psychology, linguistics, economics, politics, and government. He founded the field of formal logic and made pioneering contributions to all fields of philosophy and science.",
                         achievements: [
@@ -622,7 +932,8 @@
                         id: 8,
                         name: "Ibn Sina (Avicenna)",
                         period: "Islamic Golden Age (980-1037 CE)",
-                        field: "Medicine & Philosophy",
+                        field: "Medicine",
+                        image: "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Wrote influential medical texts used for centuries",
                         fullDescription: "Abu Ali al-Husayn ibn Sina, known in the West as Avicenna, was a Persian polymath who is regarded as one of the most significant physicians, astronomers, thinkers and writers of the Islamic Golden Age. His medical texts were used in European universities for centuries.",
                         achievements: [
@@ -643,7 +954,8 @@
                         id: 9,
                         name: "Galileo Galilei",
                         period: "Renaissance (1564-1642)",
-                        field: "Astronomy & Physics",
+                        field: "Astronomy",
+                        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Improved telescope, supported heliocentrism",
                         fullDescription: "Galileo Galilei was an Italian astronomer, physicist and engineer who played a major role in the Scientific Revolution. He improved the telescope and made groundbreaking astronomical observations that supported the Copernican model of the solar system.",
                         achievements: [
@@ -665,7 +977,8 @@
                         id: 10,
                         name: "Tu Youyou",
                         period: "Contemporary (1930-present)",
-                        field: "Medicine & Pharmacology",
+                        field: "Medicine",
+                        image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&h=200&fit=crop&crop=face",
                         shortDescription: "Discovered artemisinin for malaria treatment",
                         fullDescription: "Tu Youyou is a Chinese pharmaceutical chemist and malariologist who discovered artemisinin and dihydroartemisinin, used to treat malaria. Her discovery has saved millions of lives and earned her the Nobel Prize in Physiology or Medicine in 2015.",
                         achievements: [
@@ -681,9 +994,106 @@
                             { year: "1972", event: "Discovered artemisinin" },
                             { year: "2015", event: "Won Nobel Prize in Physiology or Medicine" }
                         ]
+                    },
+                    {
+                        id: 11,
+                        name: "Nikola Tesla",
+                        period: "Modern (1856-1943)",
+                        field: "Physics",
+                        image: "https://images.unsplash.com/photo-1507591064344-4c142b2e0b82?w=200&h=200&fit=crop&crop=face",
+                        shortDescription: "Pioneered alternating current and wireless technology",
+                        fullDescription: "Nikola Tesla was a Serbian-American inventor, electrical engineer, mechanical engineer, and futurist best known for his contributions to the design of the modern alternating current electricity supply system. His inventions laid the foundation for modern electrical systems.",
+                        achievements: [
+                            "Developed alternating current (AC) electrical system",
+                            "Invented the AC induction motor",
+                            "Pioneered wireless technology",
+                            "Designed the first hydroelectric power plant",
+                            "Held over 300 patents"
+                        ],
+                        timeline: [
+                            { year: "1856", event: "Born in Smiljan, Croatia" },
+                            { year: "1884", event: "Emigrated to the United States" },
+                            { year: "1888", event: "Patented AC motor system" },
+                            { year: "1893", event: "Demonstrated wireless power transmission" },
+                            { year: "1943", event: "Death in New York City" }
+                        ]
+                    },
+                    {
+                        id: 12,
+                        name: "Rosalind Franklin",
+                        period: "Modern (1920-1958)",
+                        field: "Chemistry",
+                        image: "https://images.unsplash.com/photo-1494790108755-2616c043fe65?w=200&h=200&fit=crop&crop=face",
+                        shortDescription: "X-ray crystallographer who contributed to understanding DNA structure",
+                        fullDescription: "Rosalind Elsie Franklin was an English chemist and X-ray crystallographer whose work was central to the understanding of the molecular structures of DNA, RNA, viruses, coal, and graphite. Her X-ray diffraction images of DNA led to the discovery of the DNA double helix.",
+                        achievements: [
+                            "Produced crucial X-ray images of DNA structure",
+                            "Contributed to understanding of RNA structure",
+                            "Advanced X-ray crystallography techniques",
+                            "Studied molecular structure of viruses",
+                            "Pioneered understanding of carbon microstructures"
+                        ],
+                        timeline: [
+                            { year: "1920", event: "Born in London, England" },
+                            { year: "1951", event: "Produced Photo 51 of DNA" },
+                            { year: "1952", event: "Published work on DNA structure" },
+                            { year: "1953", event: "Watson and Crick published DNA double helix model" },
+                            { year: "1958", event: "Death from ovarian cancer" }
+                        ]
                     }
                 ],
                 filteredScientists: [],
+                
+                quizQuestions: [
+                    {
+                        question: "Who is known as the 'Father of Algebra'?",
+                        options: ["Al-Khwarizmi", "Ibn Sina", "Aristotle", "Newton"],
+                        correct: 0,
+                        explanation: "Al-Khwarizmi developed algebra and his work gave the field its name."
+                    },
+                    {
+                        question: "Which scientist discovered the elements polonium and radium?",
+                        options: ["Rosalind Franklin", "Marie Curie", "Tu Youyou", "Nikola Tesla"],
+                        correct: 1,
+                        explanation: "Marie Curie discovered both polonium and radium, winning Nobel Prizes in Physics and Chemistry."
+                    },
+                    {
+                        question: "Who developed the theory of evolution by natural selection?",
+                        options: ["Charles Darwin", "Galileo Galilei", "Albert Einstein", "Aristotle"],
+                        correct: 0,
+                        explanation: "Charles Darwin proposed the theory of evolution by natural selection in 'On the Origin of Species'."
+                    },
+                    {
+                        question: "Which Islamic Golden Age scientist is considered the father of modern optics?",
+                        options: ["Al-Khwarizmi", "Ibn Sina", "Ibn al-Haytham", "Al-Biruni"],
+                        correct: 2,
+                        explanation: "Ibn al-Haytham (Alhazen) pioneered the field of optics and the scientific method."
+                    },
+                    {
+                        question: "Who formulated the famous equation E=mc²?",
+                        options: ["Newton", "Einstein", "Tesla", "Galileo"],
+                        correct: 1,
+                        explanation: "Albert Einstein formulated E=mc² as part of his special theory of relativity."
+                    },
+                    {
+                        question: "Which scientist discovered artemisinin for malaria treatment?",
+                        options: ["Marie Curie", "Rosalind Franklin", "Tu Youyou", "Ibn Sina"],
+                        correct: 2,
+                        explanation: "Tu Youyou discovered artemisinin, saving millions of lives from malaria."
+                    },
+                    {
+                        question: "Who improved the telescope and discovered Jupiter's moons?",
+                        options: ["Galileo Galilei", "Isaac Newton", "Nikola Tesla", "Ibn al-Haytham"],
+                        correct: 0,
+                        explanation: "Galileo improved the telescope and discovered Jupiter's four largest moons."
+                    },
+                    {
+                        question: "Which scientist wrote 'The Canon of Medicine'?",
+                        options: ["Al-Khwarizmi", "Ibn Sina", "Tu Youyou", "Marie Curie"],
+                        correct: 1,
+                        explanation: "Ibn Sina (Avicenna) wrote 'The Canon of Medicine', used in European universities for centuries."
+                    }
+                ],
 
                 init() {
                     setTimeout(() => {
@@ -691,6 +1101,11 @@
                         this.filteredScientists = this.scientists;
                         this.animateCards();
                     }, 1000);
+                    this.shuffleQuizQuestions();
+                },
+
+                get currentQuestion() {
+                    return this.quizQuestions[this.currentQuestionIndex];
                 },
 
                 filterScientists() {
@@ -699,9 +1114,9 @@
                                             scientist.field.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
                                             scientist.shortDescription.toLowerCase().includes(this.searchQuery.toLowerCase());
                         
-                        const matchesPeriod = this.selectedPeriod === 'All' || scientist.period.includes(this.selectedPeriod);
+                        const matchesCategory = this.selectedCategory === 'All' || scientist.field.includes(this.selectedCategory);
                         
-                        return matchesSearch && matchesPeriod;
+                        return matchesSearch && matchesCategory;
                     });
                     
                     this.$nextTick(() => {
@@ -709,9 +1124,16 @@
                     });
                 },
 
-                filterByPeriod(period) {
-                    this.selectedPeriod = period;
+                filterByCategory(category) {
+                    this.selectedCategory = category;
                     this.filterScientists();
+                },
+
+                setSection(section) {
+                    this.currentSection = section;
+                    if (section === 'quiz') {
+                        this.resetQuiz();
+                    }
                 },
 
                 openModal(scientist) {
@@ -724,6 +1146,99 @@
                     this.modalOpen = false;
                     this.selectedScientist = null;
                     document.body.style.overflow = 'auto';
+                },
+
+                shareScientist(scientist) {
+                    if (navigator.share) {
+                        navigator.share({
+                            title: `${scientist.name} - Legendary Scientist`,
+                            text: `Learn about ${scientist.name}: ${scientist.shortDescription}`,
+                            url: window.location.href
+                        });
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        const text = `Check out ${scientist.name}: ${scientist.shortDescription} - ${window.location.href}`;
+                        navigator.clipboard.writeText(text).then(() => {
+                            this.showToastMessage('Link copied to clipboard!');
+                        });
+                    }
+                },
+
+                printScientist(scientist) {
+                    this.printContent = scientist;
+                    setTimeout(() => {
+                        window.print();
+                    }, 100);
+                },
+
+                showToastMessage(message) {
+                    this.toastMessage = message;
+                    this.showToast = true;
+                    setTimeout(() => {
+                        this.showToast = false;
+                    }, 3000);
+                },
+
+                // Quiz Methods
+                shuffleQuizQuestions() {
+                    this.quizQuestions = this.quizQuestions.sort(() => Math.random() - 0.5);
+                },
+
+                selectAnswer(index) {
+                    if (!this.showingAnswer) {
+                        this.selectedAnswer = index;
+                    }
+                },
+
+                checkAnswer() {
+                    this.showingAnswer = true;
+                    if (this.selectedAnswer === this.currentQuestion.correct) {
+                        this.quizScore++;
+                    }
+                },
+
+                getOptionClass(index) {
+                    if (!this.showingAnswer) {
+                        return this.selectedAnswer === index ? 'quiz-option selected' : 'quiz-option';
+                    }
+                    
+                    if (index === this.currentQuestion.correct) {
+                        return 'quiz-option correct';
+                    } else if (index === this.selectedAnswer && index !== this.currentQuestion.correct) {
+                        return 'quiz-option incorrect';
+                    }
+                    return 'quiz-option';
+                },
+
+                nextQuestion() {
+                    if (this.currentQuestionIndex + 1 < this.quizQuestions.length) {
+                        this.currentQuestionIndex++;
+                        this.selectedAnswer = null;
+                        this.showingAnswer = false;
+                    } else {
+                        this.quizCompleted = true;
+                    }
+                },
+
+                getScoreMessage() {
+                    const percentage = (this.quizScore / this.quizQuestions.length) * 100;
+                    if (percentage >= 90) return "Excellent! You're a true science enthusiast! 🌟";
+                    if (percentage >= 70) return "Great job! You know your scientists well! 👏";
+                    if (percentage >= 50) return "Good work! Keep learning about these amazing minds! 📚";
+                    return "Keep exploring! There's so much to discover about these legendary scientists! 🔬";
+                },
+
+                restartQuiz() {
+                    this.resetQuiz();
+                    this.shuffleQuizQuestions();
+                },
+
+                resetQuiz() {
+                    this.currentQuestionIndex = 0;
+                    this.selectedAnswer = null;
+                    this.showingAnswer = false;
+                    this.quizScore = 0;
+                    this.quizCompleted = false;
                 },
 
                 animateCards() {
@@ -752,6 +1267,45 @@
                 }
             }
         });
+
+        // Print styles
+        const printStyles = `
+            @media print {
+                body * { visibility: hidden; }
+                .print-content, .print-content * { visibility: visible; }
+                .print-content {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    padding: 20px;
+                    font-family: serif;
+                }
+                .print-content h1 { 
+                    font-size: 24px; 
+                    margin-bottom: 10px; 
+                }
+                .print-content h3 { 
+                    font-size: 18px; 
+                    margin: 15px 0 5px 0; 
+                }
+                .print-content p { 
+                    margin: 8px 0; 
+                    line-height: 1.6; 
+                }
+                .print-content ul { 
+                    margin: 10px 0; 
+                    padding-left: 20px; 
+                }
+                .print-content li { 
+                    margin: 4px 0; 
+                }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = printStyles;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
